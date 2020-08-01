@@ -16,11 +16,6 @@ while loop:
 
     products_item_tag = soup.find_all('div', {'class':'product-item'})
 
-# xóa đoạn này đi để lấy hết dữ liệu:
-###########################################
-    if page ==3:
-        loop = False
-###########################################
     if products_item_tag == []:
         loop = False
     else:
@@ -45,12 +40,16 @@ while loop:
                 print("We got one article error!")
         for product in products:
             print(product)
+        print("page"+str(page))
         page +=1
-products_data = pd.DataFrame(data = products, columns = products[0].keys())
 
-print(type(products_data))
 
-products_data.to_pickle("./result.pkl")
-unpickled_result = pd.read_pickle("./result.pkl")
-print(unpickled_result)
-products_data.to_csv("./result.csv", index=False)
+if len(products) == 0:
+    print("Out of products")
+else:
+    products_data = pd.DataFrame(data = products, columns = products[0].keys())
+    print(type(products_data))
+    products_data.to_pickle("./result.pkl")
+    unpickled_result = pd.read_pickle("./result.pkl")
+    print(unpickled_result)
+    products_data.to_csv("./result.csv", index=False)
