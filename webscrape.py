@@ -1,14 +1,14 @@
 import requests
 import pandas as pd
+import time
+from random import randrange
 from bs4 import BeautifulSoup
 page = 1
-
+total_product = 0
 loop = True
 while loop:
-    tiki_link ='https://tiki.vn/noi-that/c2150?_lc=Vk4wMzQwMjAwMDQ=&page='
+    tiki_link ='https://tiki.vn/dien-thoai-may-tinh-bang/c1789?_lc=Vk4wMzQwMjAwMDQ=&page='
     final_link = tiki_link + str(page)
-    print(final_link)
-
     html = requests.get(final_link)
     soup = BeautifulSoup(html.text, 'html.parser')
 
@@ -18,9 +18,10 @@ while loop:
 
     if products_item_tag == []:
         loop = False
+
     else:
         print("_"*100)
-
+        print(final_link)
         for product_item_tag in products_item_tag:
             d = {'data-title': '', 'data-price': '', 'data-seller-product-id': '', 'data-id': ''}
             try:
@@ -40,7 +41,10 @@ while loop:
                 print("We got one article error!")
         for product in products:
             print(product)
+
         print("page"+str(page))
+        print(len(products))
+        total_product +=len(products)
         page +=1
 
 
@@ -49,7 +53,9 @@ if len(products) == 0:
 else:
     products_data = pd.DataFrame(data = products, columns = products[0].keys())
     print(type(products_data))
-    products_data.to_pickle("./result.pkl")
-    unpickled_result = pd.read_pickle("./result.pkl")
+    products_data.to_pickle("./new_result.pkl")
+    unpickled_result = pd.read_pickle("./new_result.pkl")
     print(unpickled_result)
-    products_data.to_csv("./result.csv", index=False)
+    products_data.to_csv("./new_result.csv", index=False)
+
+print(total_product)
